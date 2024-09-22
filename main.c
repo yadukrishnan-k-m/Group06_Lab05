@@ -29,7 +29,18 @@ void GPIOF_Handler(void) {
     GPIO_PORTF_ICR_R = 0x11;                // Interrupt clear, 1-clear all prior interrupts (PF7-PF0 = 00010001)
 
 }
+void Sys_Port_Initialisation(void){
 
+    // PORTF, PF7-PF0, PF4-SW1, PF3-green, PF2-blue, PF1-red, PF0-SW2
+    SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;   // Enable clock for Port F
+    GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;      // Unlock Port F
+    GPIO_PORTF_CR_R = 0x1f;                 // Commit changes,1-enable (PF7-PF0 = 00011111)
+    GPIO_PORTF_DEN_R = 0x1f;                // Digital function enable, 1-enable (PF7-PF0 = 00011111)
+    GPIO_PORTF_DIR_R = 0x0e;                // Set output/input, 1-output (PF7-PF0 = 00001110)
+    GPIO_PORTF_PUR_R = 0x11;                // Enable pull-up resistor, 1-enable (PF7-PF0 = 00010001)
+    GPIO_PORTF_DATA_R = 0x00;               // Reset the data register (PF7-PF0 = 00000000)
+
+}
 void GPIOinterrupt_Initialisation(void){
 
      // Setting PORTF interrupt registers
@@ -44,4 +55,11 @@ void GPIOinterrupt_Initialisation(void){
 
      //__asm("    cpsie i");                // Global interrupt enable
 
+}
+
+void delay_ms(int milliseconds) {
+    // Loop for the specified number of milliseconds
+    for (i = 0; i < milliseconds; i++) {
+        for (j = 0; j < 16000; j++);         // delay - loop count is based on 16 MHz clock
+    }
 }
