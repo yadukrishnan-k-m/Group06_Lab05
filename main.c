@@ -1,3 +1,27 @@
+#include <stdint.h>
+#include <stdbool.h>
+#include "tm4c123gh6pm.h"
+
+void Sys_Port_Initialisation(void);
+void GPIOinterrupt_Initialisation(void);
+void GPIOF_Handler(void);
+
+void delay_ms(int milliseconds);
+
+int i = 0;
+int j = 0;
+
+
+int main(void) {
+
+    Sys_Port_Initialisation();
+    GPIOinterrupt_Initialisation();
+
+    while (1) {
+
+    }
+}
+
 void GPIOF_Handler(void) {
 
     GPIO_PORTF_DATA_R ^= 0x02;              // Toggle data in PF1 (red led)
